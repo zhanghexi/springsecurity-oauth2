@@ -44,30 +44,13 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
 
-    /**
-     * 新增的ClientDetailsService注入
-     */
-    @Autowired
-    private ClientDetailsService clientDetailsService;
-
-    /**
-     * 新增authorizationCodeServices注入
-     */
-    @Autowired
-    private AuthorizationCodeServices authorizationCodeServices;
-
-    /**
-     * 新增UserService注入
-     */
-    @Autowired
-    private UserService userService;
-
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore())
-                .authorizationCodeServices(authorizationCodeServices)
-                .userDetailsService(userService)
-                .authenticationManager(authenticationManager);
+        endpoints.authenticationManager(authenticationManager)
+                .tokenStore(tokenStore());
+//                .authorizationCodeServices(authorizationCodeServices)
+//                .userDetailsService(userService)
+
     }
 
     /**
@@ -114,22 +97,22 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security/*.
-                tokenKeyAccess("permitAll()")*/
+        security.
+                tokenKeyAccess("permitAll()")
                 /*allow check token*/
-                /*.checkTokenAccess("isAuthenticated()")*/
-                .realm("springsecurity-oauth2")
+                .checkTokenAccess("isAuthenticated()")
+                /*.realm("springsecurity-oauth2")*/
                 .allowFormAuthenticationForClients();
     }
 
     /******************************************新增的配置类***************************************************/
-    @Bean
-    public AuthorizationCodeServices authorizationCodeServices() {
-        return new JdbcAuthorizationCodeServices(dataSource);
-    }
-
-    @Bean
-    public OAuth2RequestFactory oAuth2RequestFactory() {
-        return new DefaultOAuth2RequestFactory(clientDetailsService);
-    }
+//    @Bean
+//    public AuthorizationCodeServices authorizationCodeServices() {
+//        return new JdbcAuthorizationCodeServices(dataSource);
+//    }
+//
+//    @Bean
+//    public OAuth2RequestFactory oAuth2RequestFactory() {
+//        return new DefaultOAuth2RequestFactory(clientDetailsService);
+//    }
 }

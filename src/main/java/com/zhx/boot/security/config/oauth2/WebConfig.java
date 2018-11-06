@@ -26,26 +26,20 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-    /**
-     * 新增配置类
-     *
-     * @return
-     * @throws Exception
-     */
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/public/**", "/static/**");
-    }
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/public/**", "/static/**");
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/oauth/authorize", "/oauth/token");
+        /*http.csrf().ignoringAntMatchers("/oauth/authorize", "/oauth/token");*/
         http.authorizeRequests()
                 /*post请求往redis增加数据的url配置*/
                 .antMatchers("/redis/set*").permitAll()
@@ -57,9 +51,11 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login*").permitAll()
                 .antMatchers(HttpMethod.GET, "/login*").anonymous()
                 .anyRequest().authenticated()
+                .and()
+                .csrf().disable()
 
                 /*用户登录成功或失败的返回页面*/
-                .and()
+                /*.and()*/
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/signin")
@@ -67,14 +63,21 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 /*登录页的用户名、密码name属性*/
                 .usernameParameter("username")
                 .passwordParameter("password")
+                .permitAll()
 
                 .and()
                 .logout()
-                .deleteCookies("JSESSIONID")
+                .permitAll();
+                /*.deleteCookies("JSESSIONID")
 
                 .and()
-                .exceptionHandling();
+                .exceptionHandling();*/
         http.authenticationProvider(authenticationProvider());
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Bean
