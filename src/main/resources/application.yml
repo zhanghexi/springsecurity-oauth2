@@ -8,6 +8,7 @@ spring:
     encoding: UTF-8
     content-type: text/html
     mode: LEGACYHTML5
+#数据库配置(根据实际情况而定)
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/oauth2test?useSSL=true&useUnicode=true&characterEncoding=utf-8
@@ -17,7 +18,7 @@ spring:
     max-idle: 8
     min-idle: 8
     initial-size: 10
-#redis配置
+#redis配置(根据实际情况而定)
   redis:
     host: 192.168.31.11
     port: 6379

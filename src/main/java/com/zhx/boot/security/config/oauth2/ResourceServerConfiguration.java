@@ -2,8 +2,8 @@ package com.zhx.boot.security.config.oauth2;
 
 import com.zhx.boot.security.constant.Oauth2Constant;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -24,14 +24,17 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
-                .requestMatchers().antMatchers("/redis/**")
-                .and()
+        http.csrf().disable()   //禁用了 csrf 功能
                 .authorizeRequests()
-                .antMatchers("/redis/**")
-                .authenticated();
-//                .anyRequest()
-//                .authenticated();
+                /*post请求往redis增加数据的url配置*/
+                .antMatchers("/redis/set*").permitAll()
+                .antMatchers(HttpMethod.POST, "/redis/set*").anonymous()
+                /*get请求具体数据的url配置*/
+                .antMatchers("/redis/get*").permitAll()
+                .antMatchers(HttpMethod.GET, "/redis/get*").anonymous()
+                /*get请求登录的url配置*/
+                .antMatchers("/login*").permitAll()
+                .antMatchers(HttpMethod.GET, "/login*").anonymous()
+                .anyRequest().authenticated();
     }
 }

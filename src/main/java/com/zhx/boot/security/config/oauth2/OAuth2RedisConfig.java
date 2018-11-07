@@ -1,5 +1,6 @@
 package com.zhx.boot.security.config.oauth2;
 
+import com.zhx.boot.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -31,17 +32,21 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager)
-                .tokenStore(tokenStore());
-
+        endpoints.tokenStore(tokenStore())
+                .authenticationManager(authenticationManager)
+                .userDetailsService(userService);
     }
 
     /**
@@ -66,7 +71,7 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     /**
-     * 从数据库里区具体的配置项(加载上面的方法)
+     * 从数据库里获得具体的配置项(加载上面的方法)
      *
      * @param clients
      * @throws Exception
@@ -75,9 +80,7 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(clientDetails());
 //        clients.inMemory()
-//                //  client_id
 //                .withClient(Oauth2Constant.CLIENT_ID)
-//                //  client_secret
 //                .secret(Oauth2Constant.CLIENT_SECRET)
 //                .scopes(Oauth2Constant.SCOPE)
 //                .authorizedGrantTypes(Oauth2Constant.AUTH_TYPE, Oauth2Constant.PASSWORD_TYPE,
