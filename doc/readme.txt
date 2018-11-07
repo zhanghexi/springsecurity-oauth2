@@ -3,3 +3,5 @@
 2、请求token地址(POST)：
     http://localhost:8085/oauth/token?grant_type=authorization_code&code=o4YrCS&client_id=redisTokenDemo
     &client_secret=123456&redirect_uri=http://www.baidu.com
+3、客户端模式：
+    http://localhost:8085/oauth/token?grant_type=client_credentials&client_id=redisTokenDemo&client_secret=123456
