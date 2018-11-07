@@ -4,6 +4,7 @@ import com.zhx.boot.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,23 +39,30 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().ignoringAntMatchers("/oauth/authorize", "/oauth/token", "/oauth/rest_token");
         /*在此只保留login登录功能的配置，访问资源的配置移动到资源服务器*/
-        http.csrf().disable()
+        http.authorizeRequests()
+                /*get请求登录的url配置*/
+                .antMatchers("/login*").permitAll()
+                .antMatchers(HttpMethod.GET, "/login*").anonymous()
+                .anyRequest().authenticated()
+                .and()
+                /*登录表单*/
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/signin")
                 .failureUrl("/login/error")
-                /*登录页的用户名、密码name属性*/
+                /*用户名、密码name属性*/
                 .usernameParameter("username")
                 .passwordParameter("password");
         http.authenticationProvider(authenticationProvider());
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider())
-                .userDetailsService(userService);
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.authenticationProvider(authenticationProvider())
+//                .userDetailsService(userService);
+//    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
