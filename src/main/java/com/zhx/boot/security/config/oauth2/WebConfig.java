@@ -32,10 +32,10 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("/public/**", "/static/**");
-//    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/public/**", "/static/**");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -68,10 +68,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .permitAll();
-                /*.deleteCookies("JSESSIONID")
 
-                .and()
-                .exceptionHandling();*/
         http.authenticationProvider(authenticationProvider());
     }
 

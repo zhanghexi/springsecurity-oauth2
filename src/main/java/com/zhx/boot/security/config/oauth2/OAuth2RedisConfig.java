@@ -1,6 +1,5 @@
 package com.zhx.boot.security.config.oauth2;
 
-import com.zhx.boot.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
-import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
-import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
@@ -48,8 +41,6 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(tokenStore());
-//                .authorizationCodeServices(authorizationCodeServices)
-//                .userDetailsService(userService)
 
     }
 
@@ -99,20 +90,7 @@ public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.
                 tokenKeyAccess("permitAll()")
-                /*allow check token*/
                 .checkTokenAccess("isAuthenticated()")
-                /*.realm("springsecurity-oauth2")*/
                 .allowFormAuthenticationForClients();
     }
-
-    /******************************************新增的配置类***************************************************/
-//    @Bean
-//    public AuthorizationCodeServices authorizationCodeServices() {
-//        return new JdbcAuthorizationCodeServices(dataSource);
-//    }
-//
-//    @Bean
-//    public OAuth2RequestFactory oAuth2RequestFactory() {
-//        return new DefaultOAuth2RequestFactory(clientDetailsService);
-//    }
 }
