@@ -2,7 +2,6 @@ package com.zhx.boot.security.config.oauth2;
 
 import com.zhx.boot.security.constant.Oauth2Constant;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -25,14 +24,22 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                /*post请求往redis增加数据的url配置*/
-                .antMatchers("/redis/set*").permitAll()
-                .antMatchers(HttpMethod.POST, "/redis/set*").anonymous()
-                /*get请求具体数据的url配置*/
-                .antMatchers("/redis/get*").permitAll()
-                .antMatchers(HttpMethod.GET, "/redis/get*").anonymous()
-                .anyRequest().authenticated();
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and()
+                .requestMatchers().antMatchers("/redis/**")
+                .and()
+                .authorizeRequests()
+                .antMatchers("/redis/**")
+                .authenticated();
+//        http.authorizeRequests()
+//                /*post请求往redis增加数据的url配置*/
+//                .antMatchers("/redis/set*").permitAll()
+//                .antMatchers(HttpMethod.POST, "/redis/set*").anonymous()
+//                /*get请求具体数据的url配置*/
+//                .antMatchers("/redis/get*").permitAll()
+//                .antMatchers(HttpMethod.GET, "/redis/get*").anonymous()
+//                .anyRequest().authenticated();
 //                .requestMatchers().antMatchers(HttpMethod.POST, "/redis/set*")
 //                .and().authorizeRequests().antMatchers(HttpMethod.POST, "/redis/set*").authenticated()
 //                .and().requestMatchers().antMatchers(HttpMethod.GET, "/redis/get*")

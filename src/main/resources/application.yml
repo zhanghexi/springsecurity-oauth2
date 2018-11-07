@@ -6,29 +6,31 @@ spring:
     prefix: classpath:/template/
     suffix: .html
     encoding: UTF-8
-    content-type: text/html
     mode: LEGACYHTML5
+    servlet:
+      content-type: text/html
 #数据库配置(根据实际情况而定)
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/oauth2test?useSSL=true&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://192.168.1.11:3306/oauth2?useSSL=true&useUnicode=true&characterEncoding=utf-8
     username: root
-    password: root
+    password: zhx12345
     max-active: 20
     max-idle: 8
     min-idle: 8
     initial-size: 10
 #redis配置(根据实际情况而定)
   redis:
-    host: 192.168.31.11
+    host: 192.168.1.11
     port: 6379
     password: 123456
-    pool:
-      max-active: 8 #连接池最大连接数
-      max-wait: 1 #连接池最大阻塞等待时间
-      max-idle: 8 #连接池中的最大空闲连接
-      min-idle: 0 #连接池中的最小空闲连接
-    timeout: 0    #超时时间
+    jedis:
+      pool:
+        max-active: 8 #连接池最大连接数
+        max-wait: 1 #连接池最大阻塞等待时间
+        max-idle: 8 #连接池中的最大空闲连接
+        min-idle: 0 #连接池中的最小空闲连接
+        timeout: 0    #超时时间
 #忽略权限拦截(在密码模式时为false，验证码code模式是true(没有结合数据库之前这样写，增加数据库配置后这一步去掉))
 #security:
 #  basic:
