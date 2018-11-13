@@ -26,7 +26,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableAuthorizationServer
-public class OAuth2RedisConfig extends AuthorizationServerConfigurerAdapter {
+public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
