@@ -1,5 +1,4 @@
 1、授权地址：
-    http://localhost:8085/oauth/authorize?response_type=code&client_id=redisTokenDemo&redirect_uri=http://www.baidu.com&scope=read
     http://localhost:8085/oauth/authorize?client_id=redisTokenDemo&redirect_uri=http://www.baidu.com&response_type=code&scope=read
 2、请求token地址(POST)：
     http://localhost:8085/oauth/token?grant_type=authorization_code&code=o4YrCS&client_id=redisTokenDemo
