@@ -24,10 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
-                .requestMatchers().antMatchers("/redis/**")
+        http.requestMatchers().antMatchers("/redis/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/redis/**")
