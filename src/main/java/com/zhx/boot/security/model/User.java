@@ -2,7 +2,6 @@ package com.zhx.boot.security.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -11,18 +10,11 @@ import java.io.Serializable;
  * @description
  */
 @Data
-@Entity
-@Table(name = "user")
 public class User implements Serializable {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
     private String password;
 }

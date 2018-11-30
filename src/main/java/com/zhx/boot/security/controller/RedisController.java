@@ -3,8 +3,8 @@ package com.zhx.boot.security.controller;
 import com.zhx.boot.security.entity.UserInfo;
 import com.zhx.boot.security.model.User;
 import com.zhx.boot.security.service.UserService;
-import com.zhx.boot.security.util.RedisUtil;
-import com.zhx.boot.security.util.JsonUtil;
+import com.zhx.redis.assistant.RedisAssistant;
+import com.zhx.redis.util.JsonUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class RedisController {
     private UserService userService;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisAssistant redisUtil;
 
     @PostMapping(value = "setRedisValue")
     public String setRedisValue(@RequestBody UserInfo userInfo) {

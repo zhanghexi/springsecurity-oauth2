@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhx.boot.security.mapper.UserPrivilegeMapper">
+    <resultMap id="BaseResultMap" type="java.lang.String">
+        <!--<id column="id" property="id" jdbcType="INTEGER"/>-->
+        <result column="privilege" property="privilege" jdbcType="VARCHAR"/>
+        <!--<result column="user_id" property="userId" jdbcType="INTEGER"/>-->
+    </resultMap>
+
+    <select id="getAuthorities" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      SELECT DISTINCT up.privilege
+      FROM user_privilege up
+      LEFT JOIN user u ON up.user_id = #{id}
+    </select>
+</mapper>
